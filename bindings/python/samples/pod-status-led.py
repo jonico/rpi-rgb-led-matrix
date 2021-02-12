@@ -70,7 +70,7 @@ class PodStatusLed(SampleBase):
 
                 podStatus = values[2]
                 nodeName = values[6]
-                podName = values[0] + nodeName
+                podName = values[0] + "-" + nodeName
 
                 if (nodeName not in nodes.keys()):
                     continue
