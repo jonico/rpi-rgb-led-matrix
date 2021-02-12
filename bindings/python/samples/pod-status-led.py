@@ -56,6 +56,7 @@ class PodStatusLed(SampleBase):
         maxX = 32
         maxY = 32
 
+        podPixelLength=8
         podPixelHeight=8
         positionMax = (maxX/podPixelLength)*(maxY/podPixelHeight)
 
