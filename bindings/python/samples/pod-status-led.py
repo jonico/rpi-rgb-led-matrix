@@ -115,7 +115,7 @@ class PodStatusLed(SampleBase):
                     for y in range (0, podPixelHeight):
                         print("x: %d, y: %d, color: %s" % (basePosX + offsetX + x, basePosY + y, status_color(pod.podStatus)))
                         color = status_color_led(pod.podStatus)
-                        self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.gree, color.blue)
+                        self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                 i+=1
             offsetX += maxX
 
