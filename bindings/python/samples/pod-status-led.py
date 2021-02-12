@@ -17,10 +17,10 @@ class PodStatusLed(SampleBase):
         super(PodStatusLed, self).__init__(*args, **kwargs)
 
     def find_first_unused_position (positionSet):
-        for i in range (0, 1000):
+        for i in range (1000):
             if (not i in positionSet):
                  return i
-        return 0
+        return -1
 
     def status_color(status):
       return {
@@ -55,7 +55,7 @@ class PodStatusLed(SampleBase):
 
         maxX = 32
         maxY = 32
-        podPixelLength=8
+
         podPixelHeight=8
         positionMax = (maxX/podPixelLength)*(maxY/podPixelHeight)
 
@@ -89,8 +89,6 @@ class PodStatusLed(SampleBase):
                     # we only change the status, and maybe node position is already set
                     pod.status=podStatus
 
-                    #nodesByPosition[pod.node][pod.position]=pod
-
             performedDefrag = False
             for pod in podsToBeInsertedThisRound:
                 position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.node])
@@ -103,6 +101,9 @@ class PodStatusLed(SampleBase):
                                 positionsAlreadyTaken[existingPod.node].remove(existingPod.position)
                         performedDefrag = True
                     position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.node])
+                        if position >= positionMax:
+                            print("LED Matrix too small, skipping node %s until we can allocate a position." % pod.name)
+                            continue
 
                 pod.position = position
                 positionsAlreadyTaken[pod.node].add(position)
@@ -124,10 +125,13 @@ class PodStatusLed(SampleBase):
                     print("Pod: %s, Status: %s, Node: %s, Color: %s, Position: %i" % (pod.name, pod.status, pod.node, PodStatusLed.status_color(pod.status), pod.position))
                     basePosX = (i * podPixelLength) % maxX
                     basePosY = (int) (i*podPixelLength/maxX) * podPixelHeight
-                    for x in range (0, podPixelLength):
-                        for y in range (0, podPixelHeight):
+                    for x in range (podPixelLength):
+                        for y in range (podPixelHeight):
                             # print("x: %d, y: %d, color: %s" % (basePosX + offsetX + x, basePosY + y, PodStatusLed.status_color(pod.status)))
                             color = PodStatusLed.status_color_led(pod.status)
+                            # draw frame
+                            if (x == 0 or y == 0 or x == podPixelLength-1 or y == podPixelHeight-1)
+                                color = graphics.Color(128,128,128)
                             # self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                             offscreen_canvas.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                     i+=1
