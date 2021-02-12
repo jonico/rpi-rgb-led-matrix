@@ -59,8 +59,10 @@ class PodStatusLed(SampleBase):
         podPixelHeight=8
         positionMax = (maxX/podPixelLength)*(maxY/podPixelHeight)
 
-        while True:
+        offscreen_canvas = self.matrix.CreateFrameCanvas()
 
+        while True:
+            offscreen_canvas.Clear()
             podsSeenThisRound = set()
             podsToBeInsertedThisRound = []
 
@@ -126,9 +128,12 @@ class PodStatusLed(SampleBase):
                         for y in range (0, podPixelHeight):
                             # print("x: %d, y: %d, color: %s" % (basePosX + offsetX + x, basePosY + y, PodStatusLed.status_color(pod.status)))
                             color = PodStatusLed.status_color_led(pod.status)
-                            self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
+                            # self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
+                            graphics.SetPixel(offscreen_canvas, basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                     i+=1
                 offsetX += maxX
+
+            offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
             time.sleep(1)
 
 
