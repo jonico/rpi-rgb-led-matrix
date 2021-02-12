@@ -28,7 +28,11 @@ def status_color(status):
         'Pending': 'yellow'
     }.get(status, 'white')
 
-
+def find_first_unused_position (positionSet):
+    for i in range (0, 1000):
+        if (not i in positionSet):
+             return i
+    return 0
 
 class PodStatusLed(SampleBase):
     def __init__(self, *args, **kwargs):
