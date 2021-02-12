@@ -83,7 +83,7 @@ class PodStatusLed(SampleBase):
                 else:
                     # we only change the status, position is already set
                     pod.podStatus=podStatus
-                    #nodesByPosition[pod.podNode][pod.position]=pod
+                    nodesByPosition[pod.podNode][pod.position]=pod
 
             performedDefrag = False
             for pod in podsToBeInsertedThisRound:
