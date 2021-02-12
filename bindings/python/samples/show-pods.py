@@ -91,7 +91,7 @@ for node, pods in nodesByPosition.items():
     for pod in pods:
         print("Pod: %s, Status: %s, Node: %s, Color: %s, Position: %i" % (pod.podName, pod.podStatus, pod.podNode, status_color(pod.podStatus), pod.position))
         basePosX = (i * podPixelLength) % maxX
-        print "BasePos: %d" % basePosX
+        print ("BasePos: %d" % basePosX)
         basePosY = (int) (i*podPixelLength/maxX) * podPixelHeight
         for x in range (0, podPixelLength):
             for y in range (0, podPixelHeight):
