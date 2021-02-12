@@ -34,24 +34,25 @@ def status_color(status):
         'Terminated': 'black',
     }.get(status, 'pink')
 
-def find_first_unused_position (positionSet):
-    for i in range (0, 1000):
-        if (not i in positionSet):
-             return i
-    return 0
+
 
 class PodStatusLed(SampleBase):
     def __init__(self, *args, **kwargs):
         super(PodStatusLed, self).__init__(*args, **kwargs)
+        self.nodeOne='node64-1'
+        self.nodeTwo='node64-2'
+
+        self.nodes = { nodeOne : {}, nodeTwo: {} }
+        self.nodesByPosition = { nodeOne: [], nodeTwo: [] }
+        self.positionsAlreadyTaken = {nodeOne: set(), nodeTwo: set() }
+
+    def find_first_unused_position (positionSet):
+        for i in range (0, 1000):
+            if (not i in positionSet):
+                 return i
+        return 0
 
     def run(self):
-        nodeOne='node64-1'
-        nodeTwo='node64-2'
-
-        nodes = { nodeOne : {}, nodeTwo: {} }
-        nodesByPosition = { nodeOne: [], nodeTwo: [] }
-        positionsAlreadyTaken = {nodeOne: set(), nodeTwo: set() }
-
         maxX = 32
         maxY = 32
         podPixelLength=8
