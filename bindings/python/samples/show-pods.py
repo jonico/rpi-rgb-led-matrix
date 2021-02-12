@@ -38,7 +38,7 @@ positionMax = (maxX/podPixelLength)*(maxY/podPixelHeight)
 podsSeenThisRound = set()
 podsToBeInsertedThisRound = []
 
-output = subprocess.getoutput("kubectl get pods --namespace actions-runner-link --no-headers -o wide", shell=True)
+output = subprocess.getoutput("kubectl get pods --namespace actions-runner-link --no-headers -o wide")
 for row in output.split('\n'):
     values = row.split();
     if (not values):
