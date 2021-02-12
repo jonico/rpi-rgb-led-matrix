@@ -65,7 +65,7 @@ class PodStatusLed(SampleBase):
         while True:
             offscreen_canvas.Clear()
             podsSeenThisRound = set()
-            podsToBeInsertedThisRound = []
+            podsToBeInsertedThisRound = { nodeOne: [], nodeTwo: [] }
 
             output = subprocess.getoutput("kubectl get pods --namespace actions-runner-link --no-headers -o wide")
             for row in output.split("\n"):
@@ -85,37 +85,40 @@ class PodStatusLed(SampleBase):
                 pod = nodes[nodeName].get(podName)
                 if (not pod):
                     # we have to schedule the position after this loop
-                    podsToBeInsertedThisRound.append(Pod(podName, podStatus, nodeName, -1))
+                    podsToBeInsertedThisRound[nodeName].append(Pod(podName, podStatus, nodeName, -1))
                 else:
                     # we only change the status, and maybe node position is already set
                     pod.status=podStatus
 
-            performedDefrag = False
-            for pod in podsToBeInsertedThisRound:
-                position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.node])
-                if position >= positionMax:
-                    if not performedDefrag:
-                        # idea: turn defrag logic into a function
-                        for podName, existingPod in nodes[pod.node].items():
-                            if (not podName in podsSeenThisRound):
-                                # mark position for potential override, don't do it yet
-                                positionsAlreadyTaken[existingPod.node].remove(existingPod.position)
-                        performedDefrag = True
+
+            for node, pods in podsToBeInsertedThisRound.items():
+                performedDefrag = False
+                for pod in pods:
                     position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.node])
+                    if position >= positionMax:
+                        if not performedDefrag:
+                            # idea: turn defrag logic into a function
+                            for podName, existingPod in nodes[pod.node].items():
+                                if (not podName in podsSeenThisRound):
+                                    # mark position for potential override, don't do it yet
+                                    positionsAlreadyTaken[existingPod.node].remove(existingPod.position)
+                            performedDefrag = True
+                            position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.node])
+
+                    # if defrag was already performed this round or we have not been lucky
                     if position >= positionMax:
                         print("LED Matrix too small, skipping node %s until we can allocate a position." % pod.name)
                         continue
 
-                pod.position = position
-                positionsAlreadyTaken[pod.node].add(position)
-                nodes[pod.node][pod.name] = pod
-                if (position<len(nodesByPosition[pod.node])):
-                    previousPod = nodesByPosition[pod.node][pod.position]
-                    nodes[previousPod.node].pop(previousPod.name)
-                    nodesByPosition[pod.node][pod.position]=pod
-                else:
-                    nodesByPosition[pod.node].append(pod)
-
+                    pod.position = position
+                    positionsAlreadyTaken[pod.node].add(position)
+                    nodes[pod.node][pod.name] = pod
+                    if (position<len(nodesByPosition[pod.node])):
+                        previousPod = nodesByPosition[pod.node][pod.position]
+                        nodes[previousPod.node].pop(previousPod.name)
+                        nodesByPosition[pod.node][pod.position]=pod
+                    else:
+                        nodesByPosition[pod.node].append(pod)
 
             offsetX = 0
             for node, pods in nodesByPosition.items():
