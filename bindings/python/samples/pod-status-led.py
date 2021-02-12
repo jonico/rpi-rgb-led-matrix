@@ -67,9 +67,10 @@ class PodStatusLed(SampleBase):
                 values = row.split();
                 if (not values):
                     continue
-                podName = values[0]
+
                 podStatus = values[2]
                 nodeName = values[6]
+                podName = values[0] + nodeName
 
                 if (nodeName not in nodes.keys()):
                     continue
@@ -81,9 +82,10 @@ class PodStatusLed(SampleBase):
                     # we have to schedule the position after this lopp
                     podsToBeInsertedThisRound.append(Pod(podName, podStatus, nodeName, -1))
                 else:
-                    # we only change the status, position is already set
+                    # we only change the status, and maybe node position is already set
                     pod.podStatus=podStatus
-                    nodesByPosition[pod.podNode][pod.position]=pod
+
+                    #nodesByPosition[pod.podNode][pod.position]=pod
 
             performedDefrag = False
             for pod in podsToBeInsertedThisRound:
