@@ -2,6 +2,7 @@
 from samplebase import SampleBase
 import time
 import subprocess
+from rgbmatrix import graphics
 
 class Pod:
      def __init__(self, podName, podStatus, podNode, position):
