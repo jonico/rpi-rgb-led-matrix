@@ -95,11 +95,10 @@ class PodStatusLed(SampleBase):
                 if position >= positionMax:
                     if not performedDefrag:
                         # idea: turn defrag logic into a function
-                        for node, existingPods in nodes.items():
-                            for podName, existingPod in existingPods.items():
-                                if (not podName in podsSeenThisRound):
-                                    # mark position for potential override, don't do it yet
-                                    positionsAlreadyTaken[existingPod.podNode].remove(existingPod.position)
+                        for podName, existingPod in node[pod.podNode].items():
+                            if (not podName in podsSeenThisRound):
+                                # mark position for potential override, don't do it yet
+                                positionsAlreadyTaken[existingPod.podNode].remove(existingPod.position)
                         performedDefrag = True
                     position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.podNode])
 
@@ -122,7 +121,6 @@ class PodStatusLed(SampleBase):
                         pod.podStatus="Terminated"
                     print("Pod: %s, Status: %s, Node: %s, Color: %s, Position: %i" % (pod.podName, pod.podStatus, pod.podNode, PodStatusLed.status_color(pod.podStatus), pod.position))
                     basePosX = (i * podPixelLength) % maxX
-                    print ("BasePos: %d" % basePosX)
                     basePosY = (int) (i*podPixelLength/maxX) * podPixelHeight
                     for x in range (0, podPixelLength):
                         for y in range (0, podPixelHeight):
