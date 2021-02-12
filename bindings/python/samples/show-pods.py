@@ -15,12 +15,12 @@ def find_first_unused_position (positionSet):
 
 def status_color(status):
   return {
-        'Running': graphics.Color(0, 255, 0),
-        'CrashLoopBackOff': graphics.Color(255, 0, 0),
+        'Running': 'green',
+        'CrashLoopBackOff': 'red',
         'Terminating': 'brown',
-        'Completed': graphics.Color(0, 0, 0),
-        'Pending': graphics.Color(255, 0, 0),
-    }.get(status, graphics.Color(255, 255, 255))
+        'Completed': 'grey',
+        'Pending': 'yellow'
+    }.get(status, 'white')
 
 nodeOne='node64-1'
 nodeTwo='node64-2'
