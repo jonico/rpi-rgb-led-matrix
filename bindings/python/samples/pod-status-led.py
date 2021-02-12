@@ -101,9 +101,9 @@ class PodStatusLed(SampleBase):
                                 positionsAlreadyTaken[existingPod.node].remove(existingPod.position)
                         performedDefrag = True
                     position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.node])
-                        if position >= positionMax:
-                            print("LED Matrix too small, skipping node %s until we can allocate a position." % pod.name)
-                            continue
+                    if position >= positionMax:
+                        print("LED Matrix too small, skipping node %s until we can allocate a position." % pod.name)
+                        continue
 
                 pod.position = position
                 positionsAlreadyTaken[pod.node].add(position)
