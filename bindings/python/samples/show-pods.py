@@ -39,7 +39,7 @@ podsSeenThisRound = set()
 podsToBeInsertedThisRound = []
 
 output = subprocess.check_output("kubectl get pods --namespace actions-runner-link --no-headers -o wide", shell=True)
-for row in output.split('\n'):
+for row in output.split("\n"):
     values = row.split();
     if (not values):
         continue
