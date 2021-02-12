@@ -70,7 +70,7 @@ class PodStatusLed(SampleBase):
             podsSeenThisRound = set()
             podsToBeInsertedThisRound = { nodeOne: [], nodeTwo: [] }
 
-            output = subprocess.getoutput("kubectl get nodes --no-headers)
+            output = subprocess.getoutput("kubectl get nodes --no-headers")
             for row in output.split("\n"):
                 values = row.split();
                 if (not values):
