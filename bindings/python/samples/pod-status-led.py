@@ -76,7 +76,7 @@ class PodStatusLed(SampleBase):
 
                 podsSeenThisRound.add(podName)
 
-                pod = nodes[nodeName][podName]
+                pod = nodes[nodeName].get(podName)
                 if (not pod):
                     # we have to schedule the position after this lopp
                     podsToBeInsertedThisRound.append(Pod(podName, podStatus, nodeName, -1))
