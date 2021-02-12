@@ -51,7 +51,7 @@ class PodStatusLed(SampleBase):
         podsSeenThisRound = set()
         podsToBeInsertedThisRound = []
 
-        output = subprocess.check_output("kubectl get pods --namespace actions-runner-link --no-headers -o wide", shell=True)
+        output = subprocess.getoutput("kubectl get pods --namespace actions-runner-link --no-headers -o wide")
         for row in output.split("\n"):
             values = row.split();
             if (not values):
