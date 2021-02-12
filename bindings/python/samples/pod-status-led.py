@@ -18,7 +18,8 @@ def status_color_led(status):
         'Terminating': graphics.Color(165,42,42),
         'Completed': graphics.Color(0, 0, 255),
         'Pending': graphics.Color(255, 255, 255),
-        'ContainerCreating': graphics.Color(255, 255, 0)
+        'ContainerCreating': graphics.Color(255, 255, 0),
+        'Terminated': graphics.Color(0, 0, 0)
     }.get(status, graphics.Color(255,182,193))
 
 def status_color(status):
@@ -26,9 +27,11 @@ def status_color(status):
         'Running': 'green',
         'CrashLoopBackOff': 'red',
         'Terminating': 'brown',
-        'Completed': 'grey',
-        'Pending': 'yellow'
-    }.get(status, 'white')
+        'Completed': 'blue',
+        'Pending': 'white',
+        'ContainerCreating': 'yellow',
+        'Terminated': 'black',
+    }.get(status, 'pink')
 
 def find_first_unused_position (positionSet):
     for i in range (0, 1000):
@@ -110,6 +113,8 @@ class PodStatusLed(SampleBase):
             for node, pods in nodesByPosition.items():
                 i = 0
                 for pod in pods:
+                    if (not pod.podName in podsSeenThisRound):
+                        pod.podStatus="Terminated"
                     print("Pod: %s, Status: %s, Node: %s, Color: %s, Position: %i" % (pod.podName, pod.podStatus, pod.podNode, status_color(pod.podStatus), pod.position))
                     basePosX = (i * podPixelLength) % maxX
                     print ("BasePos: %d" % basePosX)
