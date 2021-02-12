@@ -130,7 +130,7 @@ class PodStatusLed(SampleBase):
                             self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                     i+=1
                 offsetX += maxX
-            time.sleep(5)
+            time.sleep(1)
 
 
 # Main function
