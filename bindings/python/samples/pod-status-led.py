@@ -45,7 +45,6 @@ class PodStatusLed(SampleBase):
             'Terminated': graphics.Color(0, 0, 0)
         }.get(status, graphics.Color(255,182,193))
 
-
     def run(self):
         nodeOne='node64-1'
         nodeTwo='node64-2'
@@ -92,7 +91,7 @@ class PodStatusLed(SampleBase):
 
             performedDefrag = False
             for pod in podsToBeInsertedThisRound:
-                position = find_first_unused_position(positionsAlreadyTaken[pod.podNode])
+                position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.podNode])
                 if position >= positionMax:
                     if not performedDefrag:
                         # idea: turn defrag logic into a function
@@ -102,7 +101,7 @@ class PodStatusLed(SampleBase):
                                     # mark position for potential override, don't do it yet
                                     positionsAlreadyTaken[existingPod.podNode].remove(existingPod.position)
                         performedDefrag = True
-                    position = find_first_unused_position(positionsAlreadyTaken[pod.podNode])
+                    position = PodStatusLed.find_first_unused_position(positionsAlreadyTaken[pod.podNode])
 
                 pod.position = position
                 positionsAlreadyTaken[pod.podNode].add(position)
@@ -121,14 +120,14 @@ class PodStatusLed(SampleBase):
                 for pod in pods:
                     if (not pod.podName in podsSeenThisRound):
                         pod.podStatus="Terminated"
-                    print("Pod: %s, Status: %s, Node: %s, Color: %s, Position: %i" % (pod.podName, pod.podStatus, pod.podNode, status_color(pod.podStatus), pod.position))
+                    print("Pod: %s, Status: %s, Node: %s, Color: %s, Position: %i" % (pod.podName, pod.podStatus, pod.podNode, PodStatusLed.status_color(pod.podStatus), pod.position))
                     basePosX = (i * podPixelLength) % maxX
                     print ("BasePos: %d" % basePosX)
                     basePosY = (int) (i*podPixelLength/maxX) * podPixelHeight
                     for x in range (0, podPixelLength):
                         for y in range (0, podPixelHeight):
-                            print("x: %d, y: %d, color: %s" % (basePosX + offsetX + x, basePosY + y, status_color(pod.podStatus)))
-                            color = status_color_led(pod.podStatus)
+                            # print("x: %d, y: %d, color: %s" % (basePosX + offsetX + x, basePosY + y, PodStatusLed.status_color(pod.podStatus)))
+                            color = PodStatusLed.status_color_led(pod.podStatus)
                             self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                     i+=1
                 offsetX += maxX
