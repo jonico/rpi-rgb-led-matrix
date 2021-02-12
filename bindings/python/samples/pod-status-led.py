@@ -15,6 +15,7 @@ def status_color_led(status):
   return {
         'Running': graphics.Color(0, 255, 0),
         'CrashLoopBackOff': graphics.Color(255, 0, 0),
+        'CreateContainerError': graphics.Color(255, 0, 0),
         'Terminating': graphics.Color(165,42,42),
         'Completed': graphics.Color(0, 0, 255),
         'Pending': graphics.Color(255, 255, 255),
