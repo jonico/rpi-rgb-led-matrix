@@ -42,7 +42,9 @@ class PodStatusLed(SampleBase):
             'Completed': graphics.Color(0, 0, 255),
             'Pending': graphics.Color(255, 255, 255),
             'ContainerCreating': graphics.Color(255, 255, 0),
-            'Terminated': graphics.Color(0, 0, 0)
+            'Terminated': graphics.Color(0, 0, 0),
+            'Ready': graphics.Color(128, 128, 128),
+            'NotReady': graphics.Color(255, 0, 0)
         }.get(status, graphics.Color(255,182,193))
 
     def run(self):
@@ -50,6 +52,7 @@ class PodStatusLed(SampleBase):
         nodeTwo='node64-2'
 
         nodes = { nodeOne : {}, nodeTwo: {} }
+        nodeStatus = { nodeOne : "NotReady", nodeTwo: "NotReady" }
         nodesByPosition = { nodeOne: [], nodeTwo: [] }
         positionsAlreadyTaken = {nodeOne: set(), nodeTwo: set() }
 
@@ -66,6 +69,14 @@ class PodStatusLed(SampleBase):
             offscreen_canvas.Clear()
             podsSeenThisRound = set()
             podsToBeInsertedThisRound = { nodeOne: [], nodeTwo: [] }
+
+            output = subprocess.getoutput("kubectl get nodes --no-headers)
+            for row in output.split("\n"):
+                values = row.split();
+                if (not values):
+                    continue
+                # read in node status
+                nodeStatus[values[0]]=values[1]
 
             output = subprocess.getoutput("kubectl get pods --namespace actions-runner-link --no-headers -o wide")
             for row in output.split("\n"):
@@ -123,6 +134,7 @@ class PodStatusLed(SampleBase):
             offsetX = 0
             for node, pods in nodesByPosition.items():
                 i = 0
+                borderColor=PodStatusLed.status_color(nodeStatus[node])
                 for pod in pods:
                     if (not pod.name in podsSeenThisRound):
                         pod.status="Terminated"
@@ -135,7 +147,7 @@ class PodStatusLed(SampleBase):
                             color = PodStatusLed.status_color_led(pod.status)
                             # draw frame
                             if (x == 0 or y == 0 or x == podPixelLength-1 or y == podPixelHeight-1):
-                                color = graphics.Color(128,128,128)
+                                color = borderColor
                             # self.matrix.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                             offscreen_canvas.SetPixel(basePosX + offsetX + x, basePosY + y, color.red, color.green, color.blue)
                     i+=1
