@@ -11,40 +11,10 @@ class Pod:
          self.podNode = podNode
          self.position = position
 
-def status_color_led(status):
-  return {
-        'Running': graphics.Color(0, 255, 0),
-        'CrashLoopBackOff': graphics.Color(255, 0, 0),
-        'CreateContainerError': graphics.Color(255, 0, 0),
-        'Terminating': graphics.Color(165,42,42),
-        'Completed': graphics.Color(0, 0, 255),
-        'Pending': graphics.Color(255, 255, 255),
-        'ContainerCreating': graphics.Color(255, 255, 0),
-        'Terminated': graphics.Color(0, 0, 0)
-    }.get(status, graphics.Color(255,182,193))
-
-def status_color(status):
-  return {
-        'Running': 'green',
-        'CrashLoopBackOff': 'red',
-        'Terminating': 'brown',
-        'Completed': 'blue',
-        'Pending': 'white',
-        'ContainerCreating': 'yellow',
-        'Terminated': 'black',
-    }.get(status, 'pink')
-
-
 
 class PodStatusLed(SampleBase):
     def __init__(self, *args, **kwargs):
         super(PodStatusLed, self).__init__(*args, **kwargs)
-        self.nodeOne='node64-1'
-        self.nodeTwo='node64-2'
-
-        self.nodes = { nodeOne : {}, nodeTwo: {} }
-        self.nodesByPosition = { nodeOne: [], nodeTwo: [] }
-        self.positionsAlreadyTaken = {nodeOne: set(), nodeTwo: set() }
 
     def find_first_unused_position (positionSet):
         for i in range (0, 1000):
@@ -52,7 +22,38 @@ class PodStatusLed(SampleBase):
                  return i
         return 0
 
+    def status_color(status):
+      return {
+            'Running': 'green',
+            'CrashLoopBackOff': 'red',
+            'Terminating': 'brown',
+            'Completed': 'blue',
+            'Pending': 'white',
+            'ContainerCreating': 'yellow',
+            'Terminated': 'black',
+        }.get(status, 'pink')
+
+    def status_color_led(status):
+      return {
+            'Running': graphics.Color(0, 255, 0),
+            'CrashLoopBackOff': graphics.Color(255, 0, 0),
+            'CreateContainerError': graphics.Color(255, 0, 0),
+            'Terminating': graphics.Color(165,42,42),
+            'Completed': graphics.Color(0, 0, 255),
+            'Pending': graphics.Color(255, 255, 255),
+            'ContainerCreating': graphics.Color(255, 255, 0),
+            'Terminated': graphics.Color(0, 0, 0)
+        }.get(status, graphics.Color(255,182,193))
+
+
     def run(self):
+        nodeOne='node64-1'
+        nodeTwo='node64-2'
+
+        nodes = { nodeOne : {}, nodeTwo: {} }
+        nodesByPosition = { nodeOne: [], nodeTwo: [] }
+        positionsAlreadyTaken = {nodeOne: set(), nodeTwo: set() }
+
         maxX = 32
         maxY = 32
         podPixelLength=8
