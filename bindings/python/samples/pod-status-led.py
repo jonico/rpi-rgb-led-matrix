@@ -16,9 +16,10 @@ def status_color_led(status):
         'Running': graphics.Color(0, 255, 0),
         'CrashLoopBackOff': graphics.Color(255, 0, 0),
         'Terminating': graphics.Color(165,42,42),
-        'Completed': graphics.Color(0, 0, 0),
-        'Pending': graphics.Color(255, 0, 0),
-    }.get(status, graphics.Color(255, 255, 255))
+        'Completed': graphics.Color(0, 0, 255),
+        'Pending': graphics.Color(255, 255, 255),
+        'ContainerCreating': graphics.Color(255, 255, 0)
+    }.get(status, graphics.Color(255,182,193))
 
 def status_color(status):
   return {
