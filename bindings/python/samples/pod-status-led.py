@@ -134,7 +134,7 @@ class PodStatusLed(SampleBase):
             offsetX = 0
             for node, pods in nodesByPosition.items():
                 i = 0
-                borderColor=PodStatusLed.status_color(nodeStatus[node])
+                borderColor=PodStatusLed.status_color_led(nodeStatus[node])
                 for pod in pods:
                     if (not pod.name in podsSeenThisRound):
                         pod.status="Terminated"
