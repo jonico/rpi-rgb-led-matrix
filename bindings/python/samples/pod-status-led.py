@@ -80,7 +80,7 @@ class PodStatusLed(SampleBase):
 
                 pod = nodes[nodeName].get(podName)
                 if (not pod):
-                    # we have to schedule the position after this lopp
+                    # we have to schedule the position after this loop
                     podsToBeInsertedThisRound.append(Pod(podName, podStatus, nodeName, -1))
                 else:
                     # we only change the status, and maybe node position is already set
