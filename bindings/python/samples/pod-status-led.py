@@ -95,7 +95,7 @@ class PodStatusLed(SampleBase):
                 if position >= positionMax:
                     if not performedDefrag:
                         # idea: turn defrag logic into a function
-                        for podName, existingPod in node[pod.podNode].items():
+                        for podName, existingPod in nodes[pod.podNode].items():
                             if (not podName in podsSeenThisRound):
                                 # mark position for potential override, don't do it yet
                                 positionsAlreadyTaken[existingPod.podNode].remove(existingPod.position)
