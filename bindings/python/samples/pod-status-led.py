@@ -76,13 +76,14 @@ class PodStatusLed(SampleBase):
 
                 podsSeenThisRound.add(podName)
 
-                pod = nodes.get(nodeName).get(podName)
+                pod = nodes[nodeName][podName]
                 if (not pod):
                     # we have to schedule the position after this lopp
                     podsToBeInsertedThisRound.append(Pod(podName, podStatus, nodeName, -1))
                 else:
                     # we only change the status, position is already set
-                    nodes[nodeName][podName] = Pod(podName, podStatus, nodeName, pod.position)
+                    pod.podStatus=podStatus
+                    #nodesByPosition[pod.podNode][pod.position]=pod
 
             performedDefrag = False
             for pod in podsToBeInsertedThisRound:
