@@ -119,7 +119,7 @@ class PodStatusLed(SampleBase):
                 i+=1
             offsetX += maxX
 
-            time.sleep(20)
+        time.sleep(20)
 
 
 # Main function
