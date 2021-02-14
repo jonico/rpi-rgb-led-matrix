@@ -83,7 +83,7 @@ class PodStatusLed(SampleBase):
             for node in self.args.nodes:
                 podsToBeInsertedThisRound[node]= []
 
-            output = subprocess.getoutput("kubectl get nodes --no-headers")
+            output = subprlocess.getoutput("kubectl get nodes --no-headers")
             for row in output.split("\n"):
                 values = row.split();
                 if (not values):
@@ -149,6 +149,11 @@ class PodStatusLed(SampleBase):
             for node, pods in nodesByPosition.items():
                 i = 0
                 borderColor=PodStatusLed.status_color_led(nodeStatus[node])
+                # draw boundaries between nodes
+                for y in range maxY:
+                    offscreen_canvas.SetPixel(offsetX + x, y, borderColor.red, borderColor.green, borderColor.blue)
+                    offscreen_canvas.SetPixel(offsetX + podPixelLength - 1, y, borderColor.red, borderColor.green, borderColor.blue)
+
                 for pod in pods:
                     if (not pod.name in podsSeenThisRound):
                         pod.status="Terminated"
