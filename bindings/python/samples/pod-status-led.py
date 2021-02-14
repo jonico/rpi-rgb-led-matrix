@@ -15,9 +15,10 @@ class Pod:
 class PodStatusLed(SampleBase):
     def __init__(self, *args, **kwargs):
         super(PodStatusLed, self).__init__(*args, **kwargs)
-        self.parser.add_argument("-1", "--one", help="First node name", default="node64-1")
-        self.parser.add_argument("-2", "--two", help="Second node name", default="node64-2")
         self.parser.add_argument("-n", "--namespace", help="Kubernetes namespace", default="actions-runner-link")
+        self.parser.add_argument("-l", "--length", help="pixel length", default=8, type=int)
+        self.parser.add_argument("-h", "--height", help="pixel height", default=8, type=int)
+        self.parser.add_argument("nodes", action='store', nargs='+', default=["node64-1", "node64-2"])
 
     def find_first_unused_position (positionSet):
         for i in range (1000):
@@ -53,19 +54,24 @@ class PodStatusLed(SampleBase):
         }.get(status, graphics.Color(255,182,193))
 
     def run(self):
-        nodeOne=self.args.one
-        nodeTwo=self.args.two
+        nodes = {}
+        nodeStatus = {}
+        nodesByPosition = {}
+        positionsAlreadyTaken = {}
 
-        nodes = { nodeOne : {}, nodeTwo: {} }
-        nodeStatus = { nodeOne : "NotReady", nodeTwo: "NotReady" }
-        nodesByPosition = { nodeOne: [], nodeTwo: [] }
-        positionsAlreadyTaken = {nodeOne: set(), nodeTwo: set() }
+        for node in self.args.nodes:
+            nodes[node] = {}
+            nodeStatus[node] = "NotReady"
+            nodesByPosition[node] = []
+            positionsAlreadyTaken[node] = set()
 
-        maxX = 32
+
+        # 64 / #(number nodes)
+        maxX = int(64/len(self.args.nodes))
         maxY = 32
 
-        podPixelLength=8
-        podPixelHeight=8
+        podPixelLength=self.args.length
+        podPixelHeight=self.args.height
         positionMax = (maxX/podPixelLength)*(maxY/podPixelHeight)
 
         offscreen_canvas = self.matrix.CreateFrameCanvas()
