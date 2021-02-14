@@ -17,6 +17,7 @@ class PodStatusLed(SampleBase):
         super(PodStatusLed, self).__init__(*args, **kwargs)
         self.parser.add_argument("-1", "--one", help="First node name", default="node64-1")
         self.parser.add_argument("-2", "--two", help="Second node name", default="node64-2")
+        self.parser.add_argument("-n", "--namespace", help="Kubernetes namespace", default="actions-runner-link")
 
     def find_first_unused_position (positionSet):
         for i in range (1000):
@@ -82,7 +83,7 @@ class PodStatusLed(SampleBase):
                 # read in node status
                 nodeStatus[values[0]]=values[1]
 
-            output = subprocess.getoutput("kubectl get pods --namespace actions-runner-link --no-headers -o wide")
+            output = subprocess.getoutput("kubectl get pods --namespace %s --no-headers -o wide" % self.args.namespace)
             for row in output.split("\n"):
                 values = row.split();
                 if (not values):
