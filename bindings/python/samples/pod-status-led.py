@@ -15,6 +15,8 @@ class Pod:
 class PodStatusLed(SampleBase):
     def __init__(self, *args, **kwargs):
         super(PodStatusLed, self).__init__(*args, **kwargs)
+        self.parser.add_argument("-1", "--one", help="First node name", default="node64-1")
+        self.parser.add_argument("-2", "--two", help="Second node name", default="node64-2")
 
     def find_first_unused_position (positionSet):
         for i in range (1000):
@@ -50,8 +52,8 @@ class PodStatusLed(SampleBase):
         }.get(status, graphics.Color(255,182,193))
 
     def run(self):
-        nodeOne='node64-1'
-        nodeTwo='node64-2'
+        nodeOne=self.args.one
+        nodeTwo=self.args.two
 
         nodes = { nodeOne : {}, nodeTwo: {} }
         nodeStatus = { nodeOne : "NotReady", nodeTwo: "NotReady" }
