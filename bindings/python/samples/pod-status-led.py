@@ -16,8 +16,8 @@ class PodStatusLed(SampleBase):
     def __init__(self, *args, **kwargs):
         super(PodStatusLed, self).__init__(*args, **kwargs)
         self.parser.add_argument("-n", "--namespace", help="Kubernetes namespace", default="actions-runner-link")
-        self.parser.add_argument("-l", "--length", help="pixel length", default=8, type=int)
-        self.parser.add_argument("-h", "--height", help="pixel height", default=8, type=int)
+        self.parser.add_argument("--length", help="pixel length", default=8, type=int)
+        self.parser.add_argument("--height", help="pixel height", default=8, type=int)
         self.parser.add_argument("nodes", action='store', nargs='+', default=["node64-1", "node64-2"])
 
     def find_first_unused_position (positionSet):
@@ -72,7 +72,7 @@ class PodStatusLed(SampleBase):
 
         podPixelLength=self.args.length
         podPixelHeight=self.args.height
-        positionMax = (maxX/podPixelLength)*(maxY/podPixelHeight)
+        positionMax = int(maxX/podPixelLength)*int(maxY/podPixelHeight)
 
         offscreen_canvas = self.matrix.CreateFrameCanvas()
 
