@@ -152,7 +152,7 @@ class PodStatusLed(SampleBase):
                 # draw boundaries between nodes
                 for y in range (maxY):
                     offscreen_canvas.SetPixel(offsetX, y, borderColor.red, borderColor.green, borderColor.blue)
-                    offscreen_canvas.SetPixel(offsetX + podPixelLength - 1, y, borderColor.red, borderColor.green, borderColor.blue)
+                    offscreen_canvas.SetPixel(offsetX + maxX - 1, y, borderColor.red, borderColor.green, borderColor.blue)
 
                 for pod in pods:
                     if (not pod.name in podsSeenThisRound):
