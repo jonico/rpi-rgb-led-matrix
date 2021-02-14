@@ -79,7 +79,9 @@ class PodStatusLed(SampleBase):
         while True:
             offscreen_canvas.Clear()
             podsSeenThisRound = set()
-            podsToBeInsertedThisRound = { nodeOne: [], nodeTwo: [] }
+            podsToBeInsertedThisRound = {}
+            for node in self.args.nodes:
+                podsToBeInsertedThisRound[node]= []
 
             output = subprocess.getoutput("kubectl get nodes --no-headers")
             for row in output.split("\n"):
