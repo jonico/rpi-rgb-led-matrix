@@ -150,7 +150,7 @@ class PodStatusLed(SampleBase):
                 i = 0
                 borderColor=PodStatusLed.status_color_led(nodeStatus[node])
                 # draw boundaries between nodes
-                for (y in range maxY):
+                for y in range (maxY):
                     offscreen_canvas.SetPixel(offsetX + x, y, borderColor.red, borderColor.green, borderColor.blue)
                     offscreen_canvas.SetPixel(offsetX + podPixelLength - 1, y, borderColor.red, borderColor.green, borderColor.blue)
 
