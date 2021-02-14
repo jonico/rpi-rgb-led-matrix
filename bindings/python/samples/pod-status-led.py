@@ -93,6 +93,7 @@ class PodStatusLed(SampleBase):
                 podName = values[0] + "-" + nodeName
 
                 if (nodeName not in nodes.keys()):
+                    print ("Node %s not displayed on LED matrix, ignoring pod %s" % (nodeName, podName))
                     continue
 
                 podsSeenThisRound.add(podName)
